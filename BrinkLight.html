@@ -75,7 +75,7 @@
             preferredFormat: "hex"
         });
 
-        // Inicializar los sliders
+        // Inicializa los sliders
         noUiSlider.create(document.getElementById('positionSlider'), {
             start: 50,
             range: {
@@ -120,7 +120,7 @@
             light.style.filter = `brightness(${intensity}%)`;
         }
 
-        // Añadir evento al botón para aplicar los cambios
+        // Añadi evento al botón para aplicar los cambios
         document.getElementById('applyButton').addEventListener('click', updateLight);
 
         // Añadir eventos para actualizar la luz cuando se mueven los sliders
