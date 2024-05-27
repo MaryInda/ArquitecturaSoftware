@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrinkLight</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.css" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+        #light {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(255, 255, 255);
+            position: absolute;
+            top: 50%;
+            left: 75%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .control-panel div {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control de Alumbrado RGB</h1>
+    <div class="control-panel">
+        <div>
+            <label for="colorPicker">Seleccione el color:</label>
+            <input type="text" id="colorPicker">
+        </div>
+        <div>
+            <label for="positionSlider">Posición Horizontal:</label>
+            <div id="positionSlider" style="width: 300px;"></div>
+        </div>
+        <div>
+            <label for="verticalPositionSlider">Posición Vertical:</label>
+            <div id="verticalPositionSlider" style="width: 300px;"></div>
+        </div>
+        <div>
+            <label for="intensitySlider">Intensidad:</label>
+            <div id="intensitySlider" style="width: 300px;"></div>
+        </div>
+        <div>
+            <button id="applyButton">Aplicar</button>
+        </div>
+    </div>
+    <div id="light"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.js"></script>
+    <script>
+        // Inicializar el selector de color
+        $("#colorPicker").spectrum({
+            color: "#ffffff",
+            showInput: true,
+            preferredFormat: "hex"
+        });
+
+        // Inicializar los sliders
+        noUiSlider.create(document.getElementById('positionSlider'), {
+            start: 50,
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            step: 1,
+            tooltips: true
+        });
+
+        noUiSlider.create(document.getElementById('verticalPositionSlider'), {
+            start: 50,
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            step: 1,
+            tooltips: true
+        });
+
+        noUiSlider.create(document.getElementById('intensitySlider'), {
+            start: 100,
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            step: 1,
+            tooltips: true
+        });
+
+        // Función para actualizar la luz
+        function updateLight() {
+            var color = $("#colorPicker").spectrum("get").toHexString();
+            var position = document.getElementById('positionSlider').noUiSlider.get();
+            var verticalPosition = document.getElementById('verticalPositionSlider').noUiSlider.get();
+            var intensity = document.getElementById('intensitySlider').noUiSlider.get();
+
+            var light = document.getElementById('light');
+            light.style.backgroundColor = color;
+            light.style.left = `${position}%`;
+            light.style.top = `${verticalPosition}%`;
+            light.style.filter = `brightness(${intensity}%)`;
+        }
+
+        // Añadir evento al botón para aplicar los cambios
+        document.getElementById('applyButton').addEventListener('click', updateLight);
+
+        // Añadir eventos para actualizar la luz cuando se mueven los sliders
+        document.getElementById('positionSlider').noUiSlider.on('update', updateLight);
+        document.getElementById('verticalPositionSlider').noUiSlider.on('update', updateLight);
+        document.getElementById('intensitySlider').noUiSlider.on('update', updateLight);
+
+        // Inicializa la luz con los valores por defecto
+        updateLight();
+    </script>
+</body>
+</html>
